@@ -10,13 +10,13 @@ output "raw_private_az_route_table_ids" {
   value = aws_route_table.private[*].id
 }
 
-#output "raw_public_az_route_table_ids" {
-#  value = aws_route_table.public[*].id
-#}
-
 output "raw_public_az_route_table_ids" {
-  value = coalescelist(aws_route_table.private[*].id, aws_route_table.public[*].id)
+  value = aws_route_table.public[*].id
 }
+
+#output "raw_public_az_route_table_ids" {
+#  value = coalescelist(aws_route_table.private[*].id, aws_route_table.public[*].id)
+#}
 
 output "az_route_table_ids" {
   value = zipmap(
