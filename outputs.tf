@@ -10,10 +10,14 @@ output "raw_private_az_route_table_ids" {
   value = aws_route_table.private[*].id
 }
 
+locals {
+  aws_rt_ids = length(aws_subnet.private[*].id) > 0 ? aws_subnet.private[*].id : aws_route_table.public[*].id
+}
+
 output "raw_public_az_route_table_ids" {
   value = zipmap(
     var.availability_zones,
-    aws_route_table.public[*].id)
+    local.aws_rt_ids)
 }
 
 #output "raw_public_az_route_table_ids" {
