@@ -6,10 +6,6 @@ output "az_subnet_ids" {
   description = "Map of AZ names to subnet IDs"
 }
 
-output "raw_private_az_route_table_ids" {
-  value = aws_route_table.private[*].id
-}
-
 locals {
   aws_rt_ids = length(aws_route_table.private[*].id) > 0 ? aws_route_table.private[*].id : aws_route_table.public[*].id
 }
