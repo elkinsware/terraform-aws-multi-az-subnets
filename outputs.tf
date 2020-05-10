@@ -1,5 +1,8 @@
 locals {
-  subnet_ids = local.private_count > 0 ? aws_subnet.private[*].id : aws_subnet.public[*].id
+  subnet_ids  = local.private_count > 0 ? aws_subnet.private[*].id : aws_subnet.public[*].id
+  aws_rt_ids  = local.private_count > 0 ? aws_route_table.private[*].id : aws_route_table.public[*].id
+  subnet_arns = local.private_count > 0 ? aws_subnet.private[*].arn : aws_subnet.public[*].arn
+  ngw_ids     = local.public_nat_gateways_count > 0 ? aws_nat_gateway.public[*].id : local.dummy_az_ngw_ids
 }
 
 output "az_subnet_ids" {
@@ -10,43 +13,20 @@ output "az_subnet_ids" {
   description = "Map of AZ names to subnet IDs"
 }
 
-#output "az_subnet_ids" {
-#  value = zipmap(
-#    var.availability_zones,
-#    coalescelist(aws_subnet.private[*].id, aws_subnet.public[*].id),
-#  )
-#  description = "Map of AZ names to subnet IDs"
-#}
-
-locals {
-  aws_rt_ids = local.private_count > 0 ? aws_route_table.private[*].id : aws_route_table.public[*].id
-}
-
 output "az_route_table_ids" {
   value = zipmap(
     var.availability_zones,
-    local.aws_rt_ids)
+    local.aws_rt_ids
+  )
   description = " Map of AZ names to Route Table IDs"
 }
-
-#output "az_route_table_ids" {
-#  value = zipmap(
-#    var.availability_zones,
-#    coalescelist(aws_route_table.private[*].id, aws_route_table.public[*].id),
-#  )
-#  description = " Map of AZ names to Route Table IDs"
-#}
 
 output "az_ngw_ids" {
   value = zipmap(
     var.availability_zones,
-    coalescelist(aws_nat_gateway.public[*].id, local.dummy_az_ngw_ids),
+    local.ngw_ids
   )
   description = "Map of AZ names to NAT Gateway IDs (only for public subnets)"
-}
-
-locals {
-  subnet_arns = local.private_count > 0 ? aws_subnet.private[*].arn : aws_subnet.public[*].arn
 }
 
 output "az_subnet_arns" {
@@ -56,12 +36,3 @@ output "az_subnet_arns" {
   )
   description = "Map of AZ names to subnet ARNs"
 }
-
-#output "az_subnet_arns" {
-#  value = zipmap(
-#    var.availability_zones,
-#    coalescelist(aws_subnet.private[*].arn, aws_subnet.public[*].arn),
-#  )
-#  description = "Map of AZ names to subnet ARNs"
-#}
-
