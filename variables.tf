@@ -147,11 +147,13 @@ variable "private_network_acl_ingress" {
 
 variable "enabled" {
   description = "Set to false to prevent the module from creating any resources"
-  default     = "true"
+  type        = bool
+  default     = true
 }
 
 variable "nat_gateway_enabled" {
   description = "Flag to enable/disable NAT Gateways creation in public subnets"
-  default     = "true"
+  type        = bool
+  default     = true
 }
 
