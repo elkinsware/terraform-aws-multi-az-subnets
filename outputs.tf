@@ -7,7 +7,7 @@ output "az_subnet_ids" {
 }
 
 locals {
-  aws_rt_ids = length(aws_route_table.private[*].id) > 0 ? aws_route_table.private[*].id : aws_route_table.public[*].id
+  aws_rt_ids = length(aws_route_table.public[*].id) > 0 ? aws_route_table.public[*].id : aws_route_table.private[*].id
 }
 
 output "az_route_table_ids" {
