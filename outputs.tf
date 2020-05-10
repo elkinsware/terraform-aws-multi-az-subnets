@@ -11,7 +11,9 @@ output "raw_private_az_route_table_ids" {
 }
 
 output "raw_public_az_route_table_ids" {
-  value = aws_route_table.public[*].id
+  value = zipmap(
+    var.availability_zones,
+    aws_route_table.public[*].id)
 }
 
 #output "raw_public_az_route_table_ids" {
