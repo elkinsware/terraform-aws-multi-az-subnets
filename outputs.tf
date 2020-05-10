@@ -1,10 +1,22 @@
+locals {
+  subnet_ids = local.private_count > 0 ? aws_subnet.private[*].id : aws_subnet.public[*].id
+}
+
 output "az_subnet_ids" {
   value = zipmap(
     var.availability_zones,
-    coalescelist(aws_subnet.private[*].id, aws_subnet.public[*].id),
+    local.subnet_ids
   )
   description = "Map of AZ names to subnet IDs"
 }
+
+#output "az_subnet_ids" {
+#  value = zipmap(
+#    var.availability_zones,
+#    coalescelist(aws_subnet.private[*].id, aws_subnet.public[*].id),
+#  )
+#  description = "Map of AZ names to subnet IDs"
+#}
 
 locals {
   aws_rt_ids = local.private_count > 0 ? aws_route_table.private[*].id : aws_route_table.public[*].id
